@@ -130,6 +130,22 @@ Modify your form to include the honeypots and other fields.  You can probably le
   </code>
 </pre>
 
+h3. Custom Messages
+
+To override the error messages just include this in your environment.rb:
+
+<pre>
+  <code>
+    NegativeCaptcha::ERROR_MESSAGES = {
+      :default => "Please try again. This usually happens because an automated script attempted to submit this form.",
+      :params => "No params provided",
+      :timestamp => "Error: Invalid timestamp.",
+      :spinner => "Error: Invalid spinner.",
+      :hidden => "Error: Hidden form fields were submitted that should not have been."
+    }
+  </code>
+</pre>
+
 h3. Test and enjoy!
   
 h2. Possible Gotchas and other concerns
