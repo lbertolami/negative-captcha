@@ -7,6 +7,13 @@ else
 end
 
 class NegativeCaptcha
+  ERROR_MESSAGES = {
+      :default => "Please try again. This usually happens because an automated script attempted to submit this form.",
+      :params => "No params provided",
+      :timestamp => "Error: Invalid timestamp.",
+      :spinner => "Error: Invalid spinner.",
+      :hidden => "Error: Hidden form fields were submitted that should not have been."
+  }
   attr_accessor :fields
   attr_accessor :values
   attr_accessor :secret
@@ -17,14 +24,14 @@ class NegativeCaptcha
 
   def initialize(opts)
     @secret = opts[:secret]||(RUBY_19 ? Digest::MD5.hexdigest("this_is_a_secret_key") : MD5.hexdigest("this_is_a_secret_key"))
-    @timestamp =  (opts.has_key?(:params) ? opts[:params][:timestamp] : nil) || Time.now().to_i
+    @timestamp = (opts.has_key?(:params) ? opts[:params][:timestamp] : nil) || Time.now().to_i
     spinner_text = ([@timestamp, @secret] + (opts[:spinner].is_a?(Array) ? opts[:spinner] : [opts[:spinner]]))*'-'
     @spinner = RUBY_19 ? Digest::MD5.hexdigest(spinner_text) : MD5.hexdigest(spinner_text)
-    @message = opts[:message]||"Please try again. This usually happens because an automated script attempted to submit this form."
-    @fields = opts[:fields].inject({}){ |hash, field_name|
+    @message = opts[:message]||ERROR_MESSAGES[:default]
+    @fields = opts[:fields].inject({}) { |hash, field_name|
       hash[field_name] = \
       if RUBY_19
-        Digest::MD5.hexdigest([field_name, @spinner, @secret]*'-')
+                                 Digest::MD5.hexdigest([field_name, @spinner, @secret]*'-')
       else
         MD5.hexdigest([field_name, @spinner, @secret]*'-')
       end
@@ -32,7 +39,7 @@ class NegativeCaptcha
       hash
     }
     @values = {}
-    @error = "No params provided"
+    @error = ERROR_MESSAGES[:params]
     process(opts[:params]) if opts[:params] && (opts[:params][:spinner]||opts[:params][:timestamp])
   end
 
@@ -46,11 +53,11 @@ class NegativeCaptcha
 
   def process(params)
     if params[:timestamp].nil? || (Time.now.to_i - params[:timestamp].to_i).abs > 86400
-      @error = "Error: Invalid timestamp.  #{@message}"
+      @error = "#{ERROR_MESSAGES[:timestamp]}  #{@message}"
     elsif params[:spinner] != @spinner
-      @error = "Error: Invalid spinner.  #{@message}"
-    elsif fields.keys.detect {|name| params[name] && params[name].length > 0}
-      @error = "Error: Hidden form fields were submitted that should not have been.  #{@message}"
+      @error = "#{ERROR_MESSAGES[:spinner]}  #{@message}"
+    elsif fields.keys.detect { |name| params[name] && params[name].length > 0 }
+      @error = "#{ERROR_MESSAGES[:hidden]}  #{@message}"
       false
     else
       @error = ""

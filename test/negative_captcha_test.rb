@@ -8,12 +8,12 @@ class NegativeCaptchaTest < Test::Unit::TestCase
     fields = [:name, :comment]
     captcha = NegativeCaptcha.new(:fields => fields)
     assert captcha.fields.is_a?(Hash)
-    assert_equal captcha.fields.keys.sort{|a,b|a.to_s<=>b.to_s}, fields.sort{|a,b|a.to_s<=>b.to_s}
+    assert_equal captcha.fields.keys.sort { |a, b| a.to_s<=>b.to_s }, fields.sort { |a, b| a.to_s<=>b.to_s }
 
     filled_form = NegativeCaptcha.new(
-      :fields => fields,
-      :timestamp => captcha.timestamp,
-      :params => {:timestamp => captcha.timestamp, :spinner => captcha.spinner}.merge(captcha.fields.inject({}){|hash, name, encrypted_name| hash[encrypted_name] = name; hash})
+        :fields => fields,
+        :timestamp => captcha.timestamp,
+        :params => {:timestamp => captcha.timestamp, :spinner => captcha.spinner}.merge(captcha.fields.inject({}) { |hash, name, encrypted_name| hash[encrypted_name] = name; hash })
     )
     assert_equal "", filled_form.error
     assert filled_form.valid?
@@ -23,12 +23,12 @@ class NegativeCaptchaTest < Test::Unit::TestCase
     fields = [:name, :comment]
     captcha = NegativeCaptcha.new(:fields => fields)
     assert captcha.fields.is_a?(Hash)
-    assert_equal captcha.fields.keys.sort{|a,b|a.to_s<=>b.to_s}, fields.sort{|a,b|a.to_s<=>b.to_s}
+    assert_equal captcha.fields.keys.sort { |a, b| a.to_s<=>b.to_s }, fields.sort { |a, b| a.to_s<=>b.to_s }
 
     filled_form = NegativeCaptcha.new(
-      :fields => fields,
-      :timestamp => captcha.timestamp,
-      :params => {:spinner => captcha.spinner}.merge(captcha.fields.inject({}){|hash, name, encrypted_name| hash[encrypted_name] = name; hash})
+        :fields => fields,
+        :timestamp => captcha.timestamp,
+        :params => {:spinner => captcha.spinner}.merge(captcha.fields.inject({}) { |hash, name, encrypted_name| hash[encrypted_name] = name; hash })
     )
     assert !filled_form.valid?
     assert filled_form.error.match(/timestamp/).is_a?(MatchData)
@@ -38,12 +38,12 @@ class NegativeCaptchaTest < Test::Unit::TestCase
     fields = [:name, :comment]
     captcha = NegativeCaptcha.new(:fields => fields)
     assert captcha.fields.is_a?(Hash)
-    assert_equal captcha.fields.keys.sort{|a,b|a.to_s<=>b.to_s}, fields.sort{|a,b|a.to_s<=>b.to_s}
+    assert_equal captcha.fields.keys.sort { |a, b| a.to_s<=>b.to_s }, fields.sort { |a, b| a.to_s<=>b.to_s }
 
     filled_form = NegativeCaptcha.new(
-      :fields => fields,
-      :timestamp => captcha.timestamp,
-      :params => {:timestamp => 1209600, :spinner => captcha.spinner}.merge(captcha.fields.inject({}){|hash, name, encrypted_name| hash[encrypted_name] = name; hash})
+        :fields => fields,
+        :timestamp => captcha.timestamp,
+        :params => {:timestamp => 1209600, :spinner => captcha.spinner}.merge(captcha.fields.inject({}) { |hash, name, encrypted_name| hash[encrypted_name] = name; hash })
     )
     assert !filled_form.valid?
     assert filled_form.error.match(/timestamp/).is_a?(MatchData)
@@ -53,12 +53,12 @@ class NegativeCaptchaTest < Test::Unit::TestCase
     fields = [:name, :comment]
     captcha = NegativeCaptcha.new(:fields => fields)
     assert captcha.fields.is_a?(Hash)
-    assert_equal captcha.fields.keys.sort{|a,b|a.to_s<=>b.to_s}, fields.sort{|a,b|a.to_s<=>b.to_s}
+    assert_equal captcha.fields.keys.sort { |a, b| a.to_s<=>b.to_s }, fields.sort { |a, b| a.to_s<=>b.to_s }
 
     filled_form = NegativeCaptcha.new(
-      :fields => fields,
-      :timestamp => captcha.timestamp,
-      :params => {:timestamp => captcha.timestamp}.merge(captcha.fields.inject({}){|hash, name, encrypted_name| hash[encrypted_name] = name; hash})
+        :fields => fields,
+        :timestamp => captcha.timestamp,
+        :params => {:timestamp => captcha.timestamp}.merge(captcha.fields.inject({}) { |hash, name, encrypted_name| hash[encrypted_name] = name; hash })
     )
     assert !filled_form.valid?
     assert filled_form.error.match(/spinner/).is_a?(MatchData)
@@ -68,12 +68,12 @@ class NegativeCaptchaTest < Test::Unit::TestCase
     fields = [:name, :comment]
     captcha = NegativeCaptcha.new(:fields => fields)
     assert captcha.fields.is_a?(Hash)
-    assert_equal captcha.fields.keys.sort{|a,b|a.to_s<=>b.to_s}, fields.sort{|a,b|a.to_s<=>b.to_s}
+    assert_equal captcha.fields.keys.sort { |a, b| a.to_s<=>b.to_s }, fields.sort { |a, b| a.to_s<=>b.to_s }
 
     filled_form = NegativeCaptcha.new(
-      :fields => fields,
-      :timestamp => captcha.timestamp,
-      :params => {:timestamp => captcha.timestamp, :spinner => captcha.spinner.reverse}.merge(captcha.fields.inject({}){|hash, name, encrypted_name| hash[encrypted_name] = name; hash})
+        :fields => fields,
+        :timestamp => captcha.timestamp,
+        :params => {:timestamp => captcha.timestamp, :spinner => captcha.spinner.reverse}.merge(captcha.fields.inject({}) { |hash, name, encrypted_name| hash[encrypted_name] = name; hash })
     )
     assert !filled_form.valid?
     assert filled_form.error.match(/spinner/).is_a?(MatchData)
@@ -83,14 +83,31 @@ class NegativeCaptchaTest < Test::Unit::TestCase
     fields = [:name, :comment]
     captcha = NegativeCaptcha.new(:fields => fields)
     assert captcha.fields.is_a?(Hash)
-    assert_equal captcha.fields.keys.sort{|a,b|a.to_s<=>b.to_s}, fields.sort{|a,b|a.to_s<=>b.to_s}
+    assert_equal captcha.fields.keys.sort { |a, b| a.to_s<=>b.to_s }, fields.sort { |a, b| a.to_s<=>b.to_s }
 
     filled_form = NegativeCaptcha.new(
-      :fields => fields,
-      :timestamp => captcha.timestamp,
-      :params => {:timestamp => captcha.timestamp, :spinner => captcha.spinner, :name => "Test"}.merge(captcha.fields.inject({}){|hash, name, encrypted_name| hash[encrypted_name] = name; hash})
+        :fields => fields,
+        :timestamp => captcha.timestamp,
+        :params => {:timestamp => captcha.timestamp, :spinner => captcha.spinner, :name => "Test"}.merge(captcha.fields.inject({}) { |hash, name, encrypted_name| hash[encrypted_name] = name; hash })
     )
     assert !filled_form.valid?
     assert filled_form.error.match(/hidden/i).is_a?(MatchData)
+  end
+
+  def test_custom_messages
+    NegativeCaptcha::ERROR_MESSAGES[:timestamp] = "La estampa de tiempo es erronea!"
+    fields = [:name, :comment]
+    captcha = NegativeCaptcha.new(:fields => fields)
+    assert captcha.fields.is_a?(Hash)
+    assert_equal captcha.fields.keys.sort { |a, b| a.to_s<=>b.to_s }, fields.sort { |a, b| a.to_s<=>b.to_s }
+
+    filled_form = NegativeCaptcha.new(
+        :fields => fields,
+        :timestamp => captcha.timestamp,
+        :params => {:spinner => captcha.spinner}.merge(captcha.fields.inject({}) { |hash, name, encrypted_name| hash[encrypted_name] = name; hash })
+    )
+    assert !filled_form.valid?
+    assert_match /estampa de tiempo/, filled_form.error
+    NegativeCaptcha::ERROR_MESSAGES[:timestamp] = "Error: Invalid timestamp." #back to original message
   end
 end
